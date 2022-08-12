@@ -3,12 +3,13 @@ pragma solidity ^0.8.10;
 
 // Import this file to use console.log
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "./Guardian.sol";
 import "./Storage.sol";
 import "./Modifiers.sol";
 
-contract SmartWallet is Guardian{
+contract SmartWallet is Guardian, IERC721Receiver{
 
     // events
 
@@ -97,7 +98,7 @@ contract SmartWallet is Guardian{
             doesRequireGuardianApproval[transactions.length-1] = true;
             updateTime();
        }
-           
+
        withdrawedToday+=_tx.value;
 
         transactions.push(Transaction({
@@ -184,6 +185,24 @@ contract SmartWallet is Guardian{
         }
     }
 
+   function onERC721Received(
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes calldata data
+    ) external returns (bytes4){
+        return this.onERC721Received.selector;
+    }
+
+    function onERC1155Received(
+        address operator,
+        address from,
+        uint256 id,
+        uint256 value,
+        bytes calldata data
+    ) external returns (bytes4){
+        return this.onERC1155Received.selector;
+    }
     // function executeGuardianTx(uint _gTxId) external {
     //     require(isApprovedByGuardian[_gTxId], "Not approved by guardian yet");
     //     if(isMultisigOn){

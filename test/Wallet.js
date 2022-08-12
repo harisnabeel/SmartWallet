@@ -30,8 +30,16 @@ describe("SmartWallet",  function () {
     deployedMockerc721 = await mockerc721.deploy();
     await deployedMockerc721.deployed();
 
-    // minting
+    // deploy erc1155
+    const mockerc1155 = await ethers.getContractFactory("Mockerc1155");
+    deployedMockerc1155 = await mockerc1155.deploy();
+    await deployedMockerc1155.deployed();
+
+    // // minting ERC721 to contract
     // await deployedMockerc721.safeMint(deployedWallet.address);
+
+    // //minting ERC1155 to contract
+    // await deployedMockerc1155.mint(deployedWallet.address,1,5,'0x00');
     // console.log(await deployedMockerc20.allowance(deployedWallet.address,accounts[5].address),"this is allowance");
     // console.log(await deployedMockerc20.balanceOf(deployedWallet.address),"this is balance of deployed");
     // console.log(await deployedMockerc20.balanceOf(accounts[0].address),"this is the balace");
@@ -39,7 +47,7 @@ describe("SmartWallet",  function () {
     // console.log(deployedWallet.address,"this is deployedaddress");
   });
 
-  xit("Should transfer tokens to another address",async function(){
+  it("Should transfer tokens to another address",async function(){
 
     // console.log( await deployedMockerc20.balanceOf(deployedWallet.address),"this is balance of wallet");
     // // approving tokens to a deployed wallet
@@ -68,5 +76,6 @@ describe("SmartWallet",  function () {
     // disabling multisig
     await deployedWallet.disableMultisig();
   })
+
 
 });
