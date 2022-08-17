@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { signMetaTxRequest } = require("../scripts/signer");
+const { signMetaTxRequest } = require("../src/signer");
 
 async function deploy(name, ...params) {
   const Contract = await ethers.getContractFactory(name);
@@ -14,7 +14,9 @@ describe.only("contracts/SmartWallet", function() {
     this.accounts = await ethers.getSigners();
     // accounts = await ethers.getSigners();
     this.forwarder = await deploy('MinimalForwarder');
+    console.log(this.forwarder.address,"forwarder address");
     this.smartWallet = await deploy("SmartWallet", 12345,this.accounts[1].address,[],this.forwarder.address);
+    console.log(this.smartWallet.address,"Smart Wallet address");
   });
 
   xit("Toggle Freeze directly", async function() {

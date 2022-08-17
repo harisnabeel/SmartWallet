@@ -229,6 +229,10 @@ contract SmartWallet is Guardian,ERC2771Context, IERC721Receiver,IERC1155Receive
     return super.isTrustedForwarder(forwarder);
   }
 
+  function register(string memory _name) public {
+    myRegister[_msgSender()] = _name;
+  }
+
     // function executeGuardianTx(uint _gTxId) external {
     //     require(isApprovedByGuardian[_gTxId], "Not approved by guardian yet");
     //     if(isMultisigOn){
