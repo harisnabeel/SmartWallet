@@ -5,11 +5,14 @@ pragma solidity ^0.8.10;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/metatx/ERC2771Context.sol";
+import "@openzeppelin/contracts/metatx/MinimalForwarder.sol";
+
 import "./Guardian.sol";
 import "./Storage.sol";
 import "./Modifiers.sol";
 
-contract SmartWallet is Guardian, IERC721Receiver{
+contract SmartWallet is Guardian,ERC2771Context, IERC721Receiver,IERC1155Receiver{
 
     // events
 
@@ -22,7 +25,7 @@ contract SmartWallet is Guardian, IERC721Receiver{
 
 
     // functions
-    constructor(uint _dailyWithdrawalLimit, address _guardian, address[] memory whiteList) Guardian(_guardian){
+    constructor(uint _dailyWithdrawalLimit, address _guardian, address[] memory whiteList,address _forwarder) Guardian(_guardian) ERC2771Context(address(_forwarder)){
         require(_dailyWithdrawalLimit>0,"Limit should be greater than 0");
         dailyWithdrawalLimit = _dailyWithdrawalLimit;
         for(uint i; i<whiteList.length;i++){
@@ -190,7 +193,7 @@ contract SmartWallet is Guardian, IERC721Receiver{
         address from,
         uint256 tokenId,
         bytes calldata data
-    ) external returns (bytes4){
+    ) external override returns (bytes4){
         return this.onERC721Received.selector;
     }
 
@@ -200,9 +203,32 @@ contract SmartWallet is Guardian, IERC721Receiver{
         uint256 id,
         uint256 value,
         bytes calldata data
-    ) external returns (bytes4){
+    ) external override returns (bytes4){
         return this.onERC1155Received.selector;
     }
+
+    function onERC1155BatchReceived(
+        address operator,
+        address from,
+        uint256[] calldata ids,
+        uint256[] calldata values,
+        bytes calldata data
+    ) external override returns (bytes4){
+        return this.onERC1155BatchReceived.selector;
+    }
+
+    function _msgSender() internal view override(ERC2771Context,Context) returns (address sender) {
+        return super._msgSender();
+    }
+
+  function _msgData() internal view override(ERC2771Context,Context) returns (bytes calldata) {
+        return super._msgData();
+  }
+
+  function isTrustedForwarder(address forwarder) public view virtual override returns (bool) {
+    return super.isTrustedForwarder(forwarder);
+  }
+
     // function executeGuardianTx(uint _gTxId) external {
     //     require(isApprovedByGuardian[_gTxId], "Not approved by guardian yet");
     //     if(isMultisigOn){

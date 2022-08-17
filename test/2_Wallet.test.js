@@ -14,7 +14,7 @@ describe("SmartWallet",  function () {
 
     accounts = await ethers.getSigners();
     const Wallet = await ethers.getContractFactory("SmartWallet");
-    deployedWallet = await Wallet.deploy(12345,accounts[1].address,[]);
+    deployedWallet = await Wallet.deploy(12345,accounts[1].address,[],accounts[10].address);
     await deployedWallet.deployed();
 
     // deploy mockerc20

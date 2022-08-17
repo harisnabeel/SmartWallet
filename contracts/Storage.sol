@@ -15,12 +15,12 @@ contract Storage is ITransaction{
     uint signersCount;
     uint threshold; // required to exectute a transaction
     mapping (uint => mapping(address=> bool)) approved; // txID => addressOfSigner => isAlreadyApprovedOrNot
-    bool isFreezed;
+    bool public isFreezed;
     bool isMultisigOn;
     uint withdrawedToday;
     uint timeToTodayLimit; // when 24 hours will be completed (for withdrawal limit)
-    Transaction[] public transactions; 
-
+    Transaction[] public transactions;
+    mapping (address => string) public myRegister;
     // Guardian contract storage
     address public guardian;
     mapping (uint => bool) public isApprovedByGuardian;
