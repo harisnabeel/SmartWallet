@@ -12,5 +12,10 @@ module.exports = {
       url: `https://rinkeby.infura.io/v3/${process.env.API_URL}`,
       accounts: [`${process.env.PRIVATE_KEY}`]
     },
+  },
+  etherscan: {
+    apiKey: {
+      rinkeby: process.env.ETH_SCAN
+    }
   }
 };

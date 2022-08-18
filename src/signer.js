@@ -51,6 +51,7 @@ async function signTypedData(signer, from, data) {
 }
 
 async function buildRequest(forwarder, input) {
+  // console.log(input.data,"rhis is input data");
   const nonce = await forwarder.getNonce(input.from).then(nonce => nonce.toString());
   return { value: 0, gas: 1e6, nonce, ...input };
 }

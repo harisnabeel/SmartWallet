@@ -12,7 +12,7 @@ import "./Guardian.sol";
 import "./Storage.sol";
 import "./Modifiers.sol";
 
-contract SmartWallet is Guardian,ERC2771Context, IERC721Receiver,IERC1155Receiver{
+contract SmartWallet is Guardian,ERC2771Context, IERC721Receiver,IERC1155Receiver,MinimalForwarder{
 
     // events
 
